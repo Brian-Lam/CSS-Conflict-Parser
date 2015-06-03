@@ -4,7 +4,7 @@ from collections import defaultdict
 
 def main():
 	# Hardcoded filepath, will implement user-input path if I have time
-	filepath = "/Users/blam/ai-www/static/sass/"
+	filepath = ""
 
 	verbose_L1 = False
 	verbose_L2 = True
