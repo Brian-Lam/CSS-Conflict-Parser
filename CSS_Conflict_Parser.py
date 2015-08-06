@@ -1,11 +1,13 @@
+import sys
 from os import listdir
 from os.path import isfile, join
 from collections import defaultdict
 
 def main():
-	# Hardcoded filepath, will implement user-input path if I have time
-	filepath = ""
+	# Grab filepath from command line arguments
+	filepath = sys.argv[1]
 
+	# Hardcoded verbosity levels, will implement user-input if I have time 
 	verbose_L1 = False
 	verbose_L2 = True
 
@@ -93,18 +95,14 @@ def main():
 							styles[selector].append(attribute)
 							styles_reference[selector].append(formatRule(_file, attribute, value))
 
-	"""
-	Print out all references to all attributes throughall out the CSS files
-	"""
+	# Print out all references to all attributes throughall out the CSS files
 	if verbose_L1:
 		for key, attrs in styles_reference.iteritems():
 			print (key)
 			for attr in attrs:
 				print ("  - " + attr)
 
-	"""
-	Only display information if referenced in more than one file
-	"""
+	# Only display information if referenced in more than one file
 	if verbose_L2:
 
 		for key, attrs in styles_reference.iteritems():
@@ -158,11 +156,9 @@ def main():
 
 
 
-"""
-	Given a string of selectors, separate them into 
-	individual components and return an array
-	of the individual selectors
-"""
+# Given a string of selectors, separate them into 
+# individual components and return an array
+# of the individual selectors
 def separateSelectors(_selectors):
 	selectors = []
 
@@ -176,14 +172,12 @@ def separateSelectors(_selectors):
 			selectors.append(trimmed)
 	return selectors
 
-"""
-	Given a string of rules, separate them into 
-	individual components and return an 
-	array of the individual rules
+# Given a string of rules, separate them into 
+# individual components and return an 
+# array of the individual rules
 
-	Format of rules:
-	String: "[attr]: [styling]"
-"""
+# Format of rules:
+# String: "[attr]: [styling]"
 def separateRules(_rules):
 	rules = []
 	for rule in _rules.split(";"):
@@ -192,22 +186,17 @@ def separateRules(_rules):
 			rules.append(trimmed)
 	return rules
 
-"""
-	Given a single CSS rule, return only the 
-	attribute associated with it. 
+# Given a single CSS rule, return only the 
+# attribute associated with it. 
 
-	For example, input "font-size: 2 em" would
-	return "font-size". 
-"""
+# For example, input "font-size: 2 em" would
+# return "font-size". 
 def getAttribute(_rule):
 	return _rule.split(":")[0].strip()
 
-"""
-	Given an array of parts of a CSS rule, return
-	only the value if it can be extracted. 
-	Otherwise return an empty string.
-
-"""
+# Given an array of parts of a CSS rule, return
+# only the value if it can be extracted. 
+# Otherwise return an empty string.
 def getValue(_rule_parts):
 	return _rule_parts[1].strip() if len(_rule_parts) > 1 else ""
 
@@ -221,11 +210,16 @@ def unconflicting_files_header():
 
 
 
-"""
-	Format rule for storage in dictionary so it can be parsed later
-"""
+# Format rule for storage in dictionary so it can be parsed later
 def formatRule(_file, attribute, value):
 	return str(_file) + " " + attribute + " " + str(value)
 
 if __name__ == "__main__":
+	if len(sys.argv) < 2:
+	    print "Usage:"
+	    print "python CSS_Conflict_Parser.py (filepath)"
+	    print "Options: -V for verbose report"
+	    print "Example: python crawler.py ~/brian-www/"
+	    print ""
+	    raise StandardError ("Incorrect usage")
 	main()
